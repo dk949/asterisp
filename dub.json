@@ -1,0 +1,10 @@
+{
+  "authors": [
+    "dk949"
+  ],
+  "copyright": "Copyright © 2022, dk949",
+  "dependencies": {},
+  "description": "A lisp with asterisks",
+  "license": "BSL-1.0",
+  "name": "asterisp"
+}
