@@ -11,9 +11,9 @@ void addNumBinOp(string op)(ref Env env) {
         l.forceCount!2;
         return new Number(
             binaryFun!('a' ~ op ~ 'b')(
-            l.payload.front.forceCast!(Number)
+            l.front.forceCast!(Number)
             .payload,
-            l.payload.back.forceCast!(Number)
+            l.back.forceCast!(Number)
             .payload
         )
         );

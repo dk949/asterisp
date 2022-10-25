@@ -9,6 +9,7 @@ mixin template AddPayload(T) {
     import core.stdc.string: memcpy;
 
     T payload;
+    alias payload this;
 
     this(T p) {
         payload = p;

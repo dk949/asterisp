@@ -26,7 +26,7 @@ in (tokens !is null) {
     if (token == "(") {
         auto l = new List();
         while (tokens.front != ")")
-            l.payload ~= _parse(tokens);
+            l ~= _parse(tokens);
         tokens.popFront;
         return l;
     } else if (token == ")") {

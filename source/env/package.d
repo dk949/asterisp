@@ -19,7 +19,7 @@ static this() {
     standard_environment.addNumBinOp!("<=");
     standard_environment.addNumBinOp!("==");
     standard_environment[new Symbol("begin")] = new Function((List l) {
-        return l.payload.back;
+        return l.back;
     });
     standard_environment[new Symbol("pi")] = new Number(PI);
 }

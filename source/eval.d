@@ -18,21 +18,21 @@ private Exp _eval(Exp x, ref Env env) {
     } else if (auto num = cast(Number) x) {
         return num;
     } else if (auto list = cast(List) x) {
-        if (list.payload.front == new Symbol("if")) {
+        if (list.front == new Symbol("if")) {
             list.forceCount!4;
-            if (_eval(list.payload[1], env).forceCast!Number.payload == 0.0)
-                return list.payload[2];
+            if (_eval(list[1], env).forceCast!Number == 0.0)
+                return list[2];
             else
-                return list.payload[3];
-        } else if (list.payload.front == new Symbol("define")) {
+                return list[3];
+        } else if (list.front == new Symbol("define")) {
             list.forceCount!3;
-            env[list.payload[1].forceCast!Symbol] = list.payload[2];
+            env[list[1].forceCast!Symbol] = list[2];
             return null;
         } else {
-            auto proc = (_eval(list.payload[0], env)).forceCast!(Function);
+            auto proc = (_eval(list[0], env)).forceCast!(Function);
             List args = new List();
-            foreach (arg; list.payload[1 .. $])
-                args.payload ~= _eval(arg, env);
+            foreach (arg; list[1 .. $])
+                args ~= _eval(arg, env);
             return proc.payload(args);
         }
     } else {
