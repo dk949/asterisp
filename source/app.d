@@ -1,9 +1,11 @@
+import args;
+import repl;
 import errors;
 import eval: eval;
 import parser;
-import types;
 
 import std.stdio;
+import std.file;
 
 enum tmpSOurce = `
 (*Def globalVar1 42)
@@ -19,20 +21,17 @@ enum tmpSOurce = `
 )
 `;
 
-void main() {
-    enum program =
-        "
-(begin
-    (define r 10)
-    (if (> 1000 (* pi (* r r)))
-        1000
-        0
-    )
-)
-";
-    program
-        .tokenize
-        .parse
-        .eval
-        .writeln;
+void main(string[] argv) {
+    auto parsedArgs = Args(argv);
+
+    if (parsedArgs.fileName)
+        parsedArgs
+            .fileName
+            .readText
+            .tokenize
+            .parse
+            .eval
+            .writeln;
+    else
+        runRepl();
 }

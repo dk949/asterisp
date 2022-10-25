@@ -17,3 +17,15 @@ class TypeError : Exception {
 class InternalError : Error {
     mixin basicExceptionCtors;
 }
+
+class InterpreterError : Exception {
+    mixin basicExceptionCtors;
+}
+
+class InterpreterArgError : InterpreterError {
+    mixin basicExceptionCtors;
+}
+
+class InterpreterFileError : InterpreterError {
+    mixin basicExceptionCtors;
+}
