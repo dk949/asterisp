@@ -14,6 +14,10 @@ class TypeError : Exception {
     mixin basicExceptionCtors;
 }
 
+class VariableError : Exception {
+    mixin basicExceptionCtors;
+}
+
 class InternalError : Error {
     mixin basicExceptionCtors;
 }

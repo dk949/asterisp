@@ -21,13 +21,35 @@ T forceCast(T, W)(W what) {
     }
 }
 
-void forceCount(size_t n, string func = __FUNCTION__)(List l) {
-    if (l.payload.length != n)
+void forceCount(size_t n, L, string func = __FUNCTION__)(L l)
+if (is(L == List) || is(L == Exp[])) {
+    if (l.length != n)
         throw new ArgumentError(
             func
                 ~ ": Expected "
                 ~ n.text
                 ~ " arguments, got "
-                ~ l.payload.length.text
+                ~ l.length.text
         );
+}
+
+enum isClass(T) = is(T : Object);
+unittest {
+    class C {
+    }
+
+    struct S {
+    }
+
+    static assert(isClass!C);
+    static assert(!isClass!S);
+    static assert(!isClass!int);
+    static assert(!isClass!string);
+}
+
+T construct(T, Args...)(Args args) {
+    static if (isClass!T)
+        return new T(args);
+    else
+        return T(args);
 }

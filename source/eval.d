@@ -7,35 +7,78 @@ import utils;
 
 import std.conv;
 import std.range;
+import std.algorithm;
 
 Exp eval(Exp x) {
     return _eval(x, standard_environment);
 }
 
-private Exp _eval(Exp x, ref Env env) {
-    if (auto sym = cast(Symbol) x) {
+/*
+def eval(x, env=global_env):
+    else:                        # procedure call
+        proc = eval(op, env)
+        vals = [eval(arg, env) for arg in args]
+        return proc(*vals)
+*/
+
+private Exp _eval(Exp x, ref Env env)
+in (x !is null) {
+    if (auto sym = cast(Symbol) x)
         return env[sym];
-    } else if (auto num = cast(Number) x) {
-        return num;
-    } else if (auto list = cast(List) x) {
-        if (list.front == new Symbol("if")) {
-            list.forceCount!4;
-            if (_eval(list[1], env).forceCast!Number == 0.0)
-                return list[2];
-            else
-                return list[3];
-        } else if (list.front == new Symbol("define")) {
-            list.forceCount!3;
-            env[list[1].forceCast!Symbol] = list[2];
-            return null;
-        } else {
-            auto proc = (_eval(list[0], env)).forceCast!(Function);
-            List args = new List();
-            foreach (arg; list[1 .. $])
-                args ~= _eval(arg, env);
-            return proc.payload(args);
-        }
+
+    auto list = cast(List) x;
+
+    if (list is null)
+        return x;
+    if (list.length == 0)
+        throw new InternalError("Cannot handle empty list in eval");
+
+    Symbol op = list[0].forceCast!Symbol;
+    Exp[] args = list[1 .. $];
+    if (op == "quote")
+        throw new InternalError("quote is not supported yet");
+    else if (op == "if") {
+        args.forceCount!3;
+        if (_eval(args[0], env).forceCast!(Number).payload)
+            return args[1];
+        else
+            return args[2];
+    } else if (op == "define") {
+        args.forceCount!2;
+        env[args[0].forceCast!Symbol] = _eval(args[1], env);
+        return null;
+    } else if (op == "set!") {
+        args.forceCount!2;
+        env.find(args[0].forceCast!Symbol) = args[1];
+        return null;
+    } else if (op == "lambda") {
+        args.forceCount!2;
+        return new Procedure(
+            args[0]
+                .forceCast!(List)
+                .map!(l => l.forceCast!Symbol)
+                .array, args[1],
+                env
+        );
     } else {
-        throw new InternalError("Unexpected type in eval: " ~ typeid(x).text);
+        //proc = eval(op, env)
+        //vals = [eval(arg, env) for arg in args]
+        //return proc(*vals)
+        auto proc = _eval(op, env);
+        List vals = new List();
+        foreach (arg; args)
+            vals ~= _eval(arg, env);
+        if (auto fn = cast(Function) proc) {
+            return fn.call(vals);
+        }
+        if (auto fn = cast(Procedure) proc) {
+            return fn.call(vals);
+        }
+        throw new InternalError("Unknown function type");
     }
+}
+
+private Exp call(Procedure proc, List args) {
+    auto newEnv = Env.subEnv(proc.params, args, &proc.env);
+    return _eval(proc.body, newEnv);
 }
