@@ -17,13 +17,14 @@ Exp parse(string[] tokens) {
     return _parse(tokens);
 }
 
-private Exp _parse(ref string[] tokens)
-in (tokens !is null) {
-    if (tokens.length == 0)
-        throw new SyntaxError("unexpected EOF");
+private Exp _parse(ref string[] tokens) {
+    if (tokens is null || tokens.length == 0)
+        throw new SyntaxError("unexpected end of input");
     auto token = tokens.front;
     tokens.popFront;
     if (token == "(") {
+        if (tokens.length == 0)
+            throw new SyntaxError("unexpected end of input");
         auto l = new List();
         while (tokens.front != ")")
             l ~= _parse(tokens);
