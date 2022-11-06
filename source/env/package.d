@@ -20,6 +20,8 @@ static this() {
     standard_environment.addNumBinOp!(">=");
     standard_environment.addNumBinOp!("<=");
     standard_environment.addNumBinOp!("==");
+    standard_environment.addNumBinOp!("||");
+    standard_environment.addNumBinOp!("&&");
     standard_environment[new Symbol("begin")] = new Function((List l) {
         return l.back;
     });
