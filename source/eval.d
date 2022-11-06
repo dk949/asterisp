@@ -13,18 +13,15 @@ Exp eval(Exp x) {
     return _eval(x, standard_environment);
 }
 
-/*
-def eval(x, env=global_env):
-    else:                        # procedure call
-        proc = eval(op, env)
-        vals = [eval(arg, env) for arg in args]
-        return proc(*vals)
-*/
-
 private Exp _eval(Exp x, ref Env env)
 in (x !is null) {
-    if (auto sym = cast(Symbol) x)
-        return env[sym];
+    if (auto sym = cast(Symbol) x) {
+        if (sym in env)
+            return env[sym];
+        else
+            throw new VariableError("No such variable " ~ sym.toString());
+
+    }
 
     auto list = cast(List) x;
 
