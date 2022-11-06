@@ -34,9 +34,9 @@ in (x !is null) {
     else if (op == "if") {
         args.forceCount!3;
         if (_eval(args[0], env).forceCast!(Number).payload)
-            return args[1];
+            return _eval(args[1], env);
         else
-            return args[2];
+            return _eval(args[2], env);
     } else if (op == "define") {
         args.forceCount!2;
         env[args[0].forceCast!Symbol] = _eval(args[1], env);
