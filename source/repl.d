@@ -1,7 +1,6 @@
 module repl;
 import std.stdio;
 
-import args;
 import repl;
 import errors;
 import eval: eval;
@@ -14,10 +13,22 @@ void runRepl(string prompt = "*> ") {
         auto line = stdin.readln;
         if (line == "exit\n")
             break;
-        line
-            .tokenize
-            .parse
-            .eval
-            .writeln;
+        try {
+            line
+                .tokenize
+                .parse
+                .eval
+                .writeln;
+        } catch (SyntaxError e) {
+            stderr.writeln("SyntaxError: ", e.message);
+        } catch (ArgumentError e) {
+            stderr.writeln("ArgumentError: ", e.message);
+        } catch (TypeError e) {
+            stderr.writeln("TypeError: ", e.message);
+        } catch (VariableError e) {
+            stderr.writeln("VariableError: ", e.message);
+        } catch (InterpreterError e) {
+            stderr.writeln("InterpreterError: ", e.message);
+        }
     }
 }
