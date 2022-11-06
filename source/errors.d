@@ -18,11 +18,11 @@ class VariableError : Exception {
     mixin basicExceptionCtors;
 }
 
-class InternalError : Error {
+class InterpreterError : Exception {
     mixin basicExceptionCtors;
 }
 
-class InterpreterError : Exception {
+class InternalError : Error {
     mixin basicExceptionCtors;
 }
 
