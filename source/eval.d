@@ -20,15 +20,12 @@ in (x !is null) {
             return env[sym];
         else
             throw new VariableError("No such variable " ~ sym.toString());
-
     }
 
     auto list = cast(List) x;
 
-    if (list is null)
+    if (list is null || list.length == 0)
         return x;
-    if (list.length == 0)
-        throw new InternalError("Cannot handle empty list in eval");
 
     Symbol op = list[0].forceCast!Symbol;
     Exp[] args = list[1 .. $];
