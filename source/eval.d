@@ -54,28 +54,20 @@ in (x !is null) {
             args[0]
                 .forceCast!(List)
                 .map!(l => l.forceCast!Symbol)
-                .array, args[1],
-                env
+                .array,
+                args[1],
+                env,
+                &_eval
         );
     } else {
-        //proc = eval(op, env)
-        //vals = [eval(arg, env) for arg in args]
-        //return proc(*vals)
         auto proc = _eval(op, env);
         List vals = new List();
         foreach (arg; args)
             vals ~= _eval(arg, env);
-        if (auto fn = cast(Function) proc) {
-            return fn.call(vals);
-        }
-        if (auto fn = cast(Procedure) proc) {
-            return fn.call(vals);
-        }
+
+        if (auto fn = cast(Callable) proc)
+            return fn.call(vals, env);
+
         throw new InternalError("Unknown function type");
     }
-}
-
-private Exp call(Procedure proc, List args) {
-    auto newEnv = Env.subEnv(proc.params, args, &proc.env);
-    return _eval(proc.body, newEnv);
 }
