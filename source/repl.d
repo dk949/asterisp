@@ -29,6 +29,8 @@ void runRepl(string prompt = "*> ") {
             stderr.writeln("VariableError: ", e.message);
         } catch (InterpreterError e) {
             stderr.writeln("InterpreterError: ", e.message);
+        }catch(Exception e){
+            stderr.writeln("UnknownError: ", e.message);
         }
     }
 }
