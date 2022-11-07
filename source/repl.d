@@ -1,5 +1,8 @@
 module repl;
 import std.stdio;
+import std.algorithm;
+import std.array;
+import std.conv;
 
 import repl;
 import errors;
@@ -7,30 +10,26 @@ import eval: eval;
 import parser;
 import types;
 
+void handleErrors(lazy void exec) {
+    try
+        exec;
+    catch (Exception e)
+        stderr.writeln(typeid(e).text.split('.')[$ - 1], ": ", e.message);
+
+}
+
 void runRepl(string prompt = "*> ") {
     while (true) {
         write(prompt);
         auto line = stdin.readln;
         if (line == "exit\n")
             break;
-        try {
-            line
-                .tokenize
-                .parse
-                .eval
-                .writeln;
-        } catch (SyntaxError e) {
-            stderr.writeln("SyntaxError: ", e.message);
-        } catch (ArgumentError e) {
-            stderr.writeln("ArgumentError: ", e.message);
-        } catch (TypeError e) {
-            stderr.writeln("TypeError: ", e.message);
-        } catch (VariableError e) {
-            stderr.writeln("VariableError: ", e.message);
-        } catch (InterpreterError e) {
-            stderr.writeln("InterpreterError: ", e.message);
-        }catch(Exception e){
-            stderr.writeln("UnknownError: ", e.message);
-        }
+
+        line
+            .tokenize
+            .parse
+            .eval
+            .writeln
+            .handleErrors;
     }
 }
