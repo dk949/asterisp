@@ -29,33 +29,8 @@ in (x !is null) {
 
     Symbol op = list[0].forceCast!Symbol;
     Exp[] args = list[1 .. $];
-    if (op == "quote")
-        throw new InternalError("quote is not supported yet");
-    else if (op == "if") {
-        args.forceCount!3;
-        if (_eval(args[0], env).forceCast!(Number).payload)
-            return _eval(args[1], env);
-        else
-            return _eval(args[2], env);
-    } else if (op == "define") {
-        args.forceCount!2;
-        env[args[0].forceCast!Symbol] = _eval(args[1], env);
-        return null;
-    } else if (op == "set!") {
-        args.forceCount!2;
-        env.find(args[0].forceCast!Symbol) = args[1];
-        return null;
-    } else if (op == "lambda") {
-        args.forceCount!2;
-        return new Procedure(
-            args[0]
-                .forceCast!(List)
-                .map!(l => l.forceCast!Symbol)
-                .array,
-                args[1],
-                env,
-                &_eval
-        );
+    if (op in specialFns) {
+        return specialFns[op](args, env);
     } else {
         auto proc = _eval(op, env);
         List vals = new List();
@@ -67,4 +42,29 @@ in (x !is null) {
 
         throw new InternalError("Unknown function type");
     }
+}
+
+private alias SpecialFn = Exp delegate(ref Exp[], ref Env);
+private SpecialFn[Symbol] specialFns;
+
+static this() {
+    specialFns = [
+        new Symbol("define"): (ref args, ref env) {
+            args.forceCount!2;
+            env[args[0].forceCast!Symbol] = _eval(args[1], env);
+            return null;
+        },
+        new Symbol("lambda"): (ref args, ref env) {
+            args.forceCount!2;
+            return new Procedure(args[0].forceCast!(List)
+                    .map!(l => l.forceCast!Symbol)
+                    .array, args[1], env, &_eval);
+        },
+        new Symbol("if"): (ref args, ref env) {
+            args.forceCount!3;
+            return _eval(args[0], env).forceCast!(Number).payload
+                ? _eval(args[1], env) //
+                 : _eval(args[2], env);
+        },
+    ];
 }
