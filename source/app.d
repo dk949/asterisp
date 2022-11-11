@@ -2,6 +2,7 @@ import args;
 import repl;
 import errors;
 import eval: eval;
+import tokenizer;
 import parser;
 
 import std.stdio;

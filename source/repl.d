@@ -7,6 +7,7 @@ import std.conv;
 import repl;
 import errors;
 import eval: eval;
+import tokenizer;
 import parser;
 import types;
 
