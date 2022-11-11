@@ -53,3 +53,8 @@ T construct(T, Args...)(Args args) {
     else
         return T(args);
 }
+
+auto ref dbg(string msg, T)(auto ref T t) {
+    stderr.writeln(msg, t);
+    return t;
+}
