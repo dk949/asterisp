@@ -20,10 +20,10 @@ void handleErrors(lazy void exec) {
 }
 
 void runRepl(string prompt = "*> ") {
-    while (true) {
+    while (stdin.isOpen) {
         write(prompt);
         auto line = stdin.readln;
-        if (line == "exit\n")
+        if (line == "exit\n" || line == "")
             break;
 
         line
