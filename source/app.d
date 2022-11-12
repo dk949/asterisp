@@ -31,8 +31,7 @@ void main(string[] argv) {
             .readText
             .tokenize
             .parse
-            .eval
-            .writeln;
+            .eval;
     else
         runRepl();
 }

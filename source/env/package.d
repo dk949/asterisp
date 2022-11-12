@@ -25,6 +25,14 @@ static this() {
     standard_environment[new Symbol("*Begin")] = new Function((List l) {
         return l.back;
     });
+    standard_environment[new Symbol("*Print")] = new Function((List l) {
+        import std.stdio;
+
+        foreach (elem; l)
+            write(elem);
+        writeln("");
+        return null;
+    });
     standard_environment[new Symbol("math.pi")] = new Number(PI);
     standard_environment[new Symbol("math.e")] = new Number(E);
 }
