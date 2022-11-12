@@ -6,9 +6,13 @@ import types;
 
 import std.conv;
 import std.range;
+import std.stdio;
 
 Exp parse(Token[] tokens) {
-    return _parse(tokens);
+    auto  e = _parse(tokens);
+    if(tokens.length > 0)
+        throw new SyntaxError("Unexpected input after EOF");
+    return e;
 }
 
 private Exp _parse(ref Token[] tokens) {
