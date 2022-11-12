@@ -54,6 +54,8 @@ static this() {
             auto sym = args[0].forceCast!Symbol;
             if (sym.front == '*')
                 throw new VariableError("Symbols cannot start with *");
+            if(sym in env)
+                throw new VariableError("redefinition of " ~ sym);
             env[sym] = _eval(args[1], env);
             return env[sym];
         },
