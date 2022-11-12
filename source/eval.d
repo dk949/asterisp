@@ -55,7 +55,7 @@ static this() {
             if (sym.front == '*')
                 throw new VariableError("Symbols cannot start with *");
             env[sym] = _eval(args[1], env);
-            return null;
+            return env[sym];
         },
         new Symbol("*Fn"): (ref args, ref env) {
             args.forceCount!2;
