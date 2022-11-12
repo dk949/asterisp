@@ -54,10 +54,13 @@ class Procedure : Callable {
     }
 
     override string toString() const {
-        string output = ("Fn(" ~ params[0].toString);
+        string output = "Fn(";
+        if (params && params.length > 0) {
+            output ~= params[0].toString;
 
-        foreach (param; params[1 .. $]) {
-            output ~= ", " ~ param.toString;
+            foreach (param; params.drop(1))
+                output ~= ", " ~ param.toString;
+
         }
         output ~= ")";
         return output;
@@ -104,7 +107,7 @@ struct Env {
     Env subEnv(Symbol[] params = null, List args = null, Env* outer = null) {
         auto output = this;
         output.outer = outer;
-        if (params && args) {
+        if (params.length > 0 && args.length > 0) {
             if (params.length != args.length)
                 throw new ArgumentError(
                     "Function expected "
@@ -112,7 +115,7 @@ struct Env {
                         ~ " arguments, but received "
                         ~ args.length.text
                 );
-        } else if (params || args) {
+        } else if (params.length > 0 || args.length > 0) {
             throw new InternalError(
                 "Supplied only "
                     ~ (params ? "params" : "args")
