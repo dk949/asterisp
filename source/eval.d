@@ -49,18 +49,21 @@ private SpecialFn[Symbol] specialFns;
 
 static this() {
     specialFns = [
-        new Symbol("define"): (ref args, ref env) {
+        new Symbol("*Def"): (ref args, ref env) {
             args.forceCount!2;
-            env[args[0].forceCast!Symbol] = _eval(args[1], env);
+            auto sym = args[0].forceCast!Symbol;
+            if (sym.front == '*')
+                throw new VariableError("Symbols cannot start with *");
+            env[sym] = _eval(args[1], env);
             return null;
         },
-        new Symbol("lambda"): (ref args, ref env) {
+        new Symbol("*Fn"): (ref args, ref env) {
             args.forceCount!2;
             return new Procedure(args[0].forceCast!(List)
                     .map!(l => l.forceCast!Symbol)
                     .array, args[1], env, &_eval);
         },
-        new Symbol("if"): (ref args, ref env) {
+        new Symbol("*If"): (ref args, ref env) {
             args.forceCount!3;
             return _eval(args[0], env).forceCast!(Number).payload
                 ? _eval(args[1], env) //

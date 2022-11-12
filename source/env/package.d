@@ -22,9 +22,9 @@ static this() {
     standard_environment.addNumBinOp!("==");
     standard_environment.addNumBinOp!("||");
     standard_environment.addNumBinOp!("&&");
-    standard_environment[new Symbol("begin")] = new Function((List l) {
+    standard_environment[new Symbol("*Begin")] = new Function((List l) {
         return l.back;
     });
-    standard_environment[new Symbol("pi")] = new Number(PI);
-    standard_environment[new Symbol("e")] = new Number(E);
+    standard_environment[new Symbol("math.pi")] = new Number(PI);
+    standard_environment[new Symbol("math.e")] = new Number(E);
 }
