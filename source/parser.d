@@ -9,8 +9,8 @@ import std.range;
 import std.stdio;
 
 Exp parse(Token[] tokens) {
-    auto  e = _parse(tokens);
-    if(tokens.length > 0)
+    auto e = _parse(tokens);
+    if (tokens.length > 0)
         throw new SyntaxError("Unexpected input after EOF");
     return e;
 }
