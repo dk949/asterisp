@@ -6,6 +6,7 @@ import errors;
 
 import std.conv;
 import std.range;
+import std.traits;
 
 class Exp {
     abstract override string toString() const;
@@ -25,7 +26,22 @@ class Symbol : Atom {
 }
 
 class Number : Atom {
+    import std.math;
+
     mixin AddPayload!(double);
+
+    bool isWhole() const {
+        return rint(payload) == payload;
+    }
+
+    int opCmp(Number o) const {
+        return cast(int)(sgn(payload - o.payload));
+    }
+
+    int opCmp(N)(N o) const
+    if (isNumeric!N) {
+        return cast(int)(sgn(payload - o));
+    }
 }
 
 class String : Atom {
