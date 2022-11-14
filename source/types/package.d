@@ -28,6 +28,10 @@ class Number : Atom {
     mixin AddPayload!(double);
 }
 
+class String : Atom {
+    mixin AddPayload!(string);
+}
+
 class Callable : Atom {
     abstract Exp call(List args, Env env);
 }

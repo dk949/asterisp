@@ -35,10 +35,19 @@ private Exp _parse(ref Token[] tokens) {
 }
 
 private Atom atom(Token token) {
-    if (token == TokenType.NUMBER)
-        return new Number(token.to!(TokenType.NUMBER));
-    else if (token == TokenType.ID)
-        return new Symbol(token.to!(TokenType.ID));
-    else
-        throw new InternalError("Unexpected token type");
+    with (TokenType) {
+        final switch (token.type) {
+            case ID:
+                return new Symbol(token.to!(TokenType.ID));
+            case NUMBER:
+                return new Number(token.to!(TokenType.NUMBER));
+            case STRING:
+                return new String(token.to!(TokenType.STRING));
+            case LBRACKET:
+            case RBRACKET:
+                throw new InternalError("Unexpected token type in atom");
+        }
+    }
+}
+
 }
