@@ -50,8 +50,22 @@ static this() {
     standard_environment.addNumBinOp!("==");
     standard_environment.addNumBinOp!("||");
     standard_environment.addNumBinOp!("&&");
-    standard_environment[new Symbol("math.pi")] = new Number(PI);
-    standard_environment[new Symbol("math.e")] = new Number(E);
+
+    standard_environment.addMathConst!("E");
+    standard_environment.addMathConst!("LN10");
+    standard_environment.addMathConst!("LN2");
+    standard_environment.addMathConst!("LOG10E");
+    standard_environment.addMathConst!("LOG2");
+    standard_environment.addMathConst!("LOG2E");
+    standard_environment.addMathConst!("LOG2T");
+    standard_environment.addMathConst!("M_1_PI");
+    standard_environment.addMathConst!("M_2_PI");
+    standard_environment.addMathConst!("M_2_SQRTPI");
+    standard_environment.addMathConst!("PI");
+    standard_environment.addMathConst!("PI_2");
+    standard_environment.addMathConst!("PI_4");
+    standard_environment.addMathConst!("SQRT1_2");
+    standard_environment.addMathConst!("SQRT2");
 
     // Lists
     // construct
