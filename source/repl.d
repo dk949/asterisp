@@ -10,12 +10,13 @@ import eval: eval;
 import tokenizer;
 import parser;
 import types;
+import utils;
 
 void handleErrors(lazy void exec) {
     try
         exec;
     catch (Exception e)
-        stderr.writeln(typeid(e).text.split('.')[$ - 1], ": ", e.message);
+        stderr.writeln(typeid(e).userText, ": ", e.message);
 
 }
 

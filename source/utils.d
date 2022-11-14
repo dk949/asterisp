@@ -7,18 +7,45 @@ import std.conv;
 import std.traits;
 import std.range;
 
+string userText(T)(T t) {
+    string s = t.text;
+    if (s.length == 0)
+        return "";
+    if (s[0] == '.' || s[$ - 1] == '.')
+        throw new InternalError(__FUNCTION__, " is meant to be used on type names which cannot begin or end in `.`");
+    long count = s.length;
+    foreach_reverse (ch; s) {
+        if (ch == '.')
+            return s[count .. $];
+        count--;
+    }
+    return s;
+}
+
+unittest {
+    import std.exception;
+
+    assert("".userText == "", "empty");
+    assert("hello".userText == "hello", "no dot");
+    assert("hello.hi".userText == "hi", "one dot");
+    assert("hello.hi.there".userText == "there", "two dots");
+
+    assertThrown!InternalError(".hello.hi.there".userText, "leading dot");
+    assertThrown!InternalError("hello.hi.there.".userText, "trailing dot");
+    assertThrown!InternalError(".".userText, "dot only");
+}
+
 T forceCast(T, W)(W what) {
     if (auto output = cast(T) what) {
         return output;
     } else {
         throw new TypeError(
             "Expected arguent to be of type "
-                ~ typeid(W)
-                .text
-                .text
+                ~ typeid(T)
+                .userText
                 ~ ", got "
-                ~ typeid(T).text
-                .text
+                ~ typeid(what)
+                .userText
         );
     }
 }
@@ -29,6 +56,18 @@ if (is(L == List) || is(L == Exp[])) {
         throw new ArgumentError(
             func
                 ~ ": Expected "
+                ~ n.text
+                ~ " arguments, got "
+                ~ l.length.text
+        );
+}
+
+void forceAtLeast(size_t n, L, string func = __FUNCTION__)(L l)
+if (is(L == List) || is(L == Exp[])) {
+    if (l.length < n)
+        throw new ArgumentError(
+            func
+                ~ ": Expected at least "
                 ~ n.text
                 ~ " arguments, got "
                 ~ l.length.text
