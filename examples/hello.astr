@@ -1,0 +1,4 @@
+; Classic hello world
+(*Begin
+    (*Print "hello world")
+)

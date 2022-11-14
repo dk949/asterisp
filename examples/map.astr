@@ -1,0 +1,25 @@
+(*Begin
+    (*Def map'
+        (*Fn (list fn newlist)
+            (*If (^?$ list)
+                (map' ($> list) fn
+                    (,> newlist
+                        (fn (^ list))
+                    )
+                )
+                newlist
+            )
+        )
+    )
+
+    (*Def map
+        (*Fn (list fn)
+            (map' list fn (,))
+        )
+    )
+
+    (map
+        (, 1 2 3)
+        (*Fn (x) (*Print x))
+    )
+)

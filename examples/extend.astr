@@ -1,0 +1,17 @@
+(*Begin
+    (*Def extend
+        (*Fn (l1 l2)
+            (*If (^?$ l2)
+                (extend (,> l1 (^ l2)) ($> l2))
+                l1
+            )
+        )
+    )
+
+    (*Print
+        (extend
+            (, 1 2 3)
+            (, 4 5 6)
+        )
+    )
+)
