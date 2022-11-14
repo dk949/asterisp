@@ -20,6 +20,18 @@ private union Payload {
     typeof(null) null_;
 }
 
+struct TokStr(S)
+if (isSomeString!S) {
+    S s;
+}
+
+TokStr!(S) tokStr(S)(S s)
+if (isSomeString!S) {
+    return TokStr!S(s);
+}
+
+enum isTokStr(TS) = __traits(isSame, TemplateOf!(TS), TokStr);
+
 struct Token {
     private TokenType type;
     private Payload payload;
@@ -36,10 +48,18 @@ struct Token {
             return false;
     }
 
-    bool opEquals(S)(S str) const pure nothrow
+    bool opEquals(S)(S str) const pure
     if (isSomeString!S) {
         if (type == TokenType.ID)
             return payload.str == str.text;
+        else
+            return false;
+    }
+
+    bool opEquals(TS)(TS tokS) const pure
+    if (isTokStr!TS) {
+        if (type == TokenType.STRING)
+            return payload.str == tokS.s.text;
         else
             return false;
     }
@@ -60,34 +80,26 @@ struct Token {
             return false;
     }
 
-    this(S)(S str) pure nothrow
-    if (isNarrowString!S) {
-        type = TokenType.ID;
-        payload.str = str.text;
-    }
-
     this(double num) pure nothrow {
         type = TokenType.NUMBER;
         payload.num = num;
     }
 
+    this(S)(S str) pure
+    if (isSomeString!S) {
+        type = TokenType.ID;
+        payload.str = str.text;
+    }
+
+    this(TS)(TS tokS) pure
+    if (isTokStr!TS) {
+        type = TokenType.STRING;
+        payload.str = tokS.s.text;
+    }
+
     this(TokenType tok) pure nothrow {
         type = tok;
-        with (TokenType) final switch (tok) {
-            case ID:
-                payload.str = payload.str.init;
-                break;
-            case NUMBER:
-                payload.num = payload.num.init;
-                break;
-            case STRING:
-                payload.str = payload.str.init;
-                break;
-            case LBRACKET:
-            case RBRACKET:
-                payload.null_ = payload.null_.init;
-                break;
-        }
+        payload = payload.init;
     }
 
     string toString() const pure nothrow {

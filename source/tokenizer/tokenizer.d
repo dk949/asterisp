@@ -175,12 +175,10 @@ struct Tokenizer {
                 store(State.String);
                 break;
             case '\\':
-                throw new TokenException("Escape m_chararacters not yet supported");
+                throw new TokenException("Escape characters not yet supported");
             default:
                 consume;
         }
-        drop;
-        toState(State.String);
     }
 
     private void toState(State s) {
@@ -209,7 +207,8 @@ struct Tokenizer {
                     throw new TokenException("Invalid number " ~ m_currToken.data.idup);
                 break;
             case State.String:
-                throw new TokenException("Strings not yet supported");
+                m_tokenized.put(Token(tokStr(m_currToken.data)));
+                break;
             case State.ID:
                 m_tokenized.put(Token(m_currToken.data));
                 break;
