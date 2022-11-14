@@ -1,4 +1,5 @@
 module tokenizer.utils;
+
 import std.traits;
 import std.algorithm;
 import std.uni;
