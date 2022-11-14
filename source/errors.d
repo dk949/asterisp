@@ -14,6 +14,10 @@ class ArgumentError : Exception {
     mixin basicExceptionCtors;
 }
 
+class IndexError : Exception {
+    mixin basicExceptionCtors;
+}
+
 class TypeError : Exception {
     mixin basicExceptionCtors;
 }
