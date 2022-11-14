@@ -50,4 +50,23 @@ private Atom atom(Token token) {
     }
 }
 
+/// atom
+unittest {
+    import std.exception;
+    import tokenizer.token;
+
+    assertThrown!InternalError(Token(TokenType.LBRACKET).atom());
+    assertThrown!InternalError(Token(TokenType.RBRACKET).atom());
+
+    const sym = Token("hello").atom();
+    assert(cast(Symbol) sym);
+    assert(cast(Symbol) sym == new Symbol("hello"));
+
+    const num = Token(29839).atom();
+    assert(cast(Number) num);
+    assert(cast(Number) num == new Number(29839));
+
+    const str = Token(tokStr("some string")).atom();
+    assert(cast(String) str);
+    assert(cast(String) str == new String("some string"));
 }
