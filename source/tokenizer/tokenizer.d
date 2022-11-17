@@ -1,11 +1,13 @@
 module tokenizer.tokenizer;
+
 import tokenizer.token;
-import std.array;
 import tokenizer.utils;
+
 import errors;
+
+import std.array;
 import std.conv;
 import std.uni;
-import std.traits;
 
 private alias CharIt = immutable(char)*;
 
@@ -224,7 +226,6 @@ struct Tokenizer {
 }
 
 unittest {
-    import errors;
     import std.exception;
 
     with (TokenType) {

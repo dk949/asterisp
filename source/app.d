@@ -1,3 +1,5 @@
+module app;
+
 import args;
 import exec;
 import repl;

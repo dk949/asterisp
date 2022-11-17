@@ -164,7 +164,6 @@ unittest {
 
 /// Token(TokStr)
 unittest {
-    import std.stdio;
 
     with (TokenType) {
         const emptyStr = Token(tokStr(""));

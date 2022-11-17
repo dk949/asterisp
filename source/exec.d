@@ -1,8 +1,8 @@
 module exec;
 
-import tokenizer;
-import parser;
 import eval: eval;
+import parser;
+import tokenizer;
 
 import std.file;
 

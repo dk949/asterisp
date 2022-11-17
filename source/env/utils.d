@@ -4,6 +4,7 @@ import types;
 import utils;
 
 import std.functional;
+import std.math;
 import std.range;
 
 void addNumBinOp(string op)(ref Env env) {
@@ -21,7 +22,6 @@ void addNumBinOp(string op)(ref Env env) {
 }
 
 void addMathConst(string K)(ref Env env) {
-    import std.math;
 
     mixin("auto num = new Number(" ~ K ~ ");");
     env[new Symbol("math." ~ K)] = num;

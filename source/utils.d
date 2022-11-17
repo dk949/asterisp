@@ -4,8 +4,6 @@ import errors;
 import types;
 
 import std.conv;
-import std.traits;
-import std.range;
 
 string userText(T)(T t) {
     string s = t.text;

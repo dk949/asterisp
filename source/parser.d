@@ -1,18 +1,15 @@
 module parser;
 
 import errors;
+import package_;
 import tokenizer;
 import types;
-import package_;
 
-import std.conv;
-import std.range;
-import std.stdio;
 import std.array;
 
-Package parsePackage(Token[] tokens){
+Package parsePackage(Token[] tokens) {
     auto exps = appender!(Exp[]);
-    while(tokens.length != 0)
+    while (tokens.length != 0)
         exps.put(parse(tokens));
     return new Package(exps.data);
 }
@@ -58,8 +55,9 @@ private Atom atom(Token token) {
 
 /// atom
 unittest {
-    import std.exception;
     import tokenizer.token;
+
+    import std.exception;
 
     assertThrown!InternalError(Token(TokenType.LBRACKET).atom());
     assertThrown!InternalError(Token(TokenType.RBRACKET).atom());

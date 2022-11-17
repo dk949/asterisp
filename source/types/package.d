@@ -5,8 +5,13 @@ import types.utils;
 import errors;
 
 import std.conv;
+import std.digest.murmurhash;
+import std.exception;
+import std.math;
 import std.range;
 import std.traits;
+
+import core.stdc.string;
 
 class Exp {
     abstract override string toString() const;
@@ -26,7 +31,6 @@ class Symbol : Atom {
 }
 
 class Number : Atom {
-    import std.math;
 
     mixin AddPayload!(double);
 

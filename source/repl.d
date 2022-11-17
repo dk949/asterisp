@@ -1,16 +1,11 @@
 module repl;
-import std.stdio;
-import std.algorithm;
-import std.array;
-import std.conv;
 
-import repl;
-import errors;
 import eval: eval;
-import tokenizer;
 import parser;
-import types;
+import tokenizer;
 import utils;
+
+import std.stdio;
 
 void handleErrors(lazy void exec) {
     try

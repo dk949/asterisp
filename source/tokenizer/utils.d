@@ -1,9 +1,6 @@
 module tokenizer.utils;
 
 import std.traits;
-import std.algorithm;
-import std.uni;
-import std.exception;
 
 bool isSpaceStr(S)(S str) pure nothrow {
     return str.all!isWhite.assertNotThrown;

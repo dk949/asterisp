@@ -2,14 +2,12 @@ module eval;
 
 import env;
 import errors;
+import package_;
 import types;
 import utils;
-import package_;
 
-import std.conv;
-import std.range;
 import std.algorithm;
-import std.stdio;
+import std.range;
 
 Exp eval(Exp x) {
     return eval(x, standard_environment);

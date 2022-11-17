@@ -2,13 +2,14 @@ module env;
 
 import env.utils;
 
-import types;
 import errors;
+import types;
 import utils;
 
+import std.conv;
 import std.math;
 import std.range;
-import std.conv;
+import std.stdio;
 
 Env standard_environment;
 static this() {
@@ -20,8 +21,6 @@ static this() {
         return l.front;
     });
     standard_environment[new Symbol("*Print")] = new Function((List l) {
-        import std.stdio;
-
         foreach (elem; l)
             write(elem);
         writeln("");
