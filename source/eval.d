@@ -4,16 +4,28 @@ import env;
 import errors;
 import types;
 import utils;
+import package_;
 
 import std.conv;
 import std.range;
 import std.algorithm;
+import std.stdio;
 
 Exp eval(Exp x) {
-    return _eval(x, standard_environment);
+    return eval(x, standard_environment);
 }
 
-private Exp _eval(Exp x, ref Env env)
+Exp eval(Package p) {
+    auto eviron = standard_environment;
+    foreach (def; p.defines)
+        def.eval(eviron);
+    if (p.mainFn)
+        return p.mainFn.eval(eviron);
+    else
+        return null;
+}
+
+private Exp eval(Exp x, ref Env env)
 in (x !is null) {
     if (auto sym = cast(Symbol) x) {
         if (sym in env)
@@ -32,10 +44,10 @@ in (x !is null) {
     if (op in specialFns) {
         return specialFns[op](args, env);
     } else {
-        auto proc = _eval(op, env);
+        auto proc = eval(op, env);
         List vals = new List();
         foreach (arg; args)
-            vals ~= _eval(arg, env);
+            vals ~= eval(arg, env);
 
         if (auto fn = cast(Callable) proc)
             return fn.call(vals, env);
@@ -56,20 +68,20 @@ static this() {
                 throw new VariableError("Symbols cannot start with *");
             if (sym in env)
                 throw new VariableError("redefinition of " ~ sym);
-            env[sym] = _eval(args[1], env);
+            env[sym] = eval(args[1], env);
             return env[sym];
         },
         new Symbol("*Fn"): (ref args, ref env) {
             args.forceCount!2;
             return new Procedure(args[0].forceCast!(List)
                     .map!(l => l.forceCast!Symbol)
-                    .array, args[1], env, &_eval);
+                    .array, args[1], env, &eval);
         },
         new Symbol("*If"): (ref args, ref env) {
             args.forceCount!3;
-            return _eval(args[0], env).forceCast!(Number).payload
-                ? _eval(args[1], env) //
-                 : _eval(args[2], env);
+            return eval(args[0], env).forceCast!(Number).payload
+                ? eval(args[1], env) //
+                 : eval(args[2], env);
         },
     ];
 }

@@ -3,19 +3,25 @@ module parser;
 import errors;
 import tokenizer;
 import types;
+import package_;
 
 import std.conv;
 import std.range;
 import std.stdio;
+import std.array;
 
-Exp parse(Token[] tokens) {
-    auto e = _parse(tokens);
-    if (tokens.length > 0)
-        throw new SyntaxError("Unexpected input after EOF");
-    return e;
+Package parsePackage(Token[] tokens){
+    auto exps = appender!(Exp[]);
+    while(tokens.length != 0)
+        exps.put(parse(tokens));
+    return new Package(exps.data);
 }
 
-private Exp _parse(ref Token[] tokens) {
+Exp parse(Token[] tokens) {
+    return parse(tokens);
+}
+
+Exp parse(ref Token[] tokens) {
     if (tokens is null || tokens.length == 0)
         throw new SyntaxError("unexpected end of input");
     auto token = tokens.front;
@@ -25,7 +31,7 @@ private Exp _parse(ref Token[] tokens) {
             throw new SyntaxError("unexpected end of input");
         auto l = new List();
         while (tokens.front != TokenType.RBRACKET)
-            l ~= _parse(tokens);
+            l ~= parse(tokens);
         tokens.popFront;
         return l;
     } else if (token == TokenType.RBRACKET) {

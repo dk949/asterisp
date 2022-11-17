@@ -35,12 +35,12 @@ unittest {
     assertThrown!InternalError(".".userText, "dot only");
 }
 
-T forceCast(T, W)(W what) {
+T forceCast(T, W)(W what, string kind = "arguent") {
     if (auto output = cast(T) what) {
         return output;
     } else {
         throw new TypeError(
-            "Expected arguent to be of type "
+            "Expected " ~ kind ~ " to be of type "
                 ~ typeid(T)
                 .userText
                 ~ ", got "
@@ -50,26 +50,24 @@ T forceCast(T, W)(W what) {
     }
 }
 
-void forceCount(size_t n, L, string func = __FUNCTION__)(L l)
+void forceCount(size_t n, L)(L l, string kind = "argument(s)")
 if (is(L == List) || is(L == Exp[])) {
     if (l.length != n)
         throw new ArgumentError(
-            func
-                ~ ": Expected "
+            "Expected "
                 ~ n.text
-                ~ " arguments, got "
+                ~ " " ~ kind ~ ", got "
                 ~ l.length.text
         );
 }
 
-void forceAtLeast(size_t n, L, string func = __FUNCTION__)(L l)
+void forceAtLeast(size_t n, L)(inout(L) l, string kind = "argument(s)")
 if (is(L == List) || is(L == Exp[])) {
     if (l.length < n)
         throw new ArgumentError(
-            func
-                ~ ": Expected at least "
+            "Expected at least "
                 ~ n.text
-                ~ " arguments, got "
+                ~ " " ~ kind ~ ", got "
                 ~ l.length.text
         );
 }

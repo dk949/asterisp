@@ -65,11 +65,11 @@ struct Tokenizer {
         }
         final switch (m_state) {
             case State.StringStart:
-                throw new TokenException("Unexpected \" at end of input");
+                throw new TokenError("Unexpected \" at end of input");
             case State.Minus:
                 throw new InternalError("Unstored Minus at end of input");
             case State.String:
-                throw new TokenException("Unterminated string at end of input");
+                throw new TokenError("Unterminated string at end of input");
             case State.ID:
             case State.Number:
                 store(m_state);
@@ -122,7 +122,7 @@ struct Tokenizer {
     private void sID() {
         switch (*m_char) {
             case '"':
-                throw new TokenException("unsexpected \" when parsing ID");
+                throw new TokenError("unsexpected \" when parsing ID");
             case '(':
             case ')':
             case ' ':
@@ -175,7 +175,7 @@ struct Tokenizer {
                 store(State.String);
                 break;
             case '\\':
-                throw new TokenException("Escape characters not yet supported");
+                throw new TokenError("Escape characters not yet supported");
             default:
                 consume;
         }
@@ -204,7 +204,7 @@ struct Tokenizer {
                 try
                     m_tokenized.put(Token(m_currToken.data.to!double));
                 catch (ConvException)
-                    throw new TokenException("Invalid number " ~ m_currToken.data.idup);
+                    throw new TokenError("Invalid number " ~ m_currToken.data.idup);
                 break;
             case State.String:
                 m_tokenized.put(Token(tokStr(m_currToken.data)));
@@ -264,11 +264,11 @@ unittest {
         assert(pscin.length == 1 && pscin[0] == NUMBER && pscin[0] == 1.7e-10, "positive mantissa negative exponent");
         assert(nscin.length == 1 && nscin[0] == NUMBER && nscin[0] == -1.7e-10, "negative mantissa negative exponent");
 
-        assertThrown!TokenException(Tokenizer("1.2.3").run(), "too many decimal points");
-        assertThrown!TokenException(Tokenizer("1e5e5").run(), "too many e");
-        assertThrown!TokenException(Tokenizer("1e").run(), "trailing e");
-        assertThrown!TokenException(Tokenizer("1e.").run(), "trailing e and decimal point");
-        assertThrown!TokenException(Tokenizer("1.e").run(), "trailing decimal point and e");
+        assertThrown!TokenError(Tokenizer("1.2.3").run(), "too many decimal points");
+        assertThrown!TokenError(Tokenizer("1e5e5").run(), "too many e");
+        assertThrown!TokenError(Tokenizer("1e").run(), "trailing e");
+        assertThrown!TokenError(Tokenizer("1e.").run(), "trailing e and decimal point");
+        assertThrown!TokenError(Tokenizer("1.e").run(), "trailing decimal point and e");
 
         // Many tokens
         const openOpenCLose = Tokenizer("(()").run();

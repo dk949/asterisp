@@ -15,19 +15,9 @@ static this() {
     standard_environment = construct!Env;
 
     // General
-    standard_environment[new Symbol("*Begin")] = new Function((List l) {
-        standard_environment[new Symbol("*Begin")] = new Function((List l) {
-            return l.back;
-        });
-        standard_environment[new Symbol("*Print")] = new Function((List l) {
-            import std.stdio;
-
-            foreach (elem; l)
-                write(elem);
-            writeln("");
-            return null;
-        });
-        return l.back;
+    standard_environment[new Symbol("*Main")] = new Function((List l) {
+        l.forceCount!1;
+        return l.front;
     });
     standard_environment[new Symbol("*Print")] = new Function((List l) {
         import std.stdio;

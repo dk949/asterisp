@@ -2,11 +2,15 @@ module errors;
 
 import std.exception;
 
-class TokenException : Exception {
+class TokenError : Exception {
     mixin basicExceptionCtors;
 }
 
 class SyntaxError : Exception {
+    mixin basicExceptionCtors;
+}
+
+class SemanticError : Exception {
     mixin basicExceptionCtors;
 }
 
