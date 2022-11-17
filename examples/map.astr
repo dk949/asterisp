@@ -1,23 +1,23 @@
-(*Begin
-    (*Def map'
-        (*Fn (list fn newlist)
-            (*If (^?$ list)
-                (map' ($> list) fn
-                    (,> newlist
-                        (fn (^ list))
-                    )
+(*Def map'
+    (*Fn (list fn newlist)
+        (*If (^?$ list)
+            (map' ($> list) fn
+                (,> newlist
+                    (fn (^ list))
                 )
-                newlist
             )
+            newlist
         )
     )
+)
 
-    (*Def map
-        (*Fn (list fn)
-            (map' list fn (,))
-        )
+(*Def map
+    (*Fn (list fn)
+        (map' list fn (,))
     )
+)
 
+(*Main
     (map
         (, 1 2 3)
         (*Fn (x) (*Print x))

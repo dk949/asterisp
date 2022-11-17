@@ -1,13 +1,13 @@
-(*Begin
-    (*Def extend
-        (*Fn (l1 l2)
-            (*If (^?$ l2)
-                (extend (,> l1 (^ l2)) ($> l2))
-                l1
-            )
+(*Def extend
+    (*Fn (l1 l2)
+        (*If (^?$ l2)
+            (extend (,> l1 (^ l2)) ($> l2))
+            l1
         )
     )
+)
 
+(*Main
     (*Print
         (extend
             (, 1 2 3)

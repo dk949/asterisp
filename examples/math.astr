@@ -1,9 +1,10 @@
 ; Function to calculate the area of a circle
-(*Begin
-    (*Def area
-        (*Fn (r)
-            (* math.PI (* r r))
-        )
+(*Def area
+    (*Fn (r)
+        (* math.PI (* r r))
     )
+)
+
+(*Main
     (*Print (area 3))
 )
