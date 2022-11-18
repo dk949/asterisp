@@ -16,9 +16,10 @@ class Package {
         foreach (exp; exps) {
             const lst = exp.forceCast!List("expression at package scope");
             lst.forceAtLeast!1("item in an expression at package scope");
-            const sym = lst.front.forceCast!Symbol;
+            const sym = lst.front.forceCast!Symbol(1.thArgOf("expression at package scope"));
             switch (sym) {
                 case "*Def":
+                case "*Defn":
                     defs.put(exp);
                     break;
                 case "*Main":
