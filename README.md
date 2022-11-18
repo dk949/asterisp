@@ -19,3 +19,7 @@ Pass a file to execute as the first argument to the executable
 ``` sh
 dub build
 ```
+
+## Syntax
+
+Not finalised
