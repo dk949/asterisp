@@ -6,18 +6,15 @@ import utils;
 import std.functional;
 import std.math;
 import std.range;
+import std.stdio;
 
 void addNumBinOp(string op)(ref Env env) {
     env[new Symbol(op)] = new Function((List l) {
         l.forceCount!2;
-        return new Number(
-            binaryFun!('a' ~ op ~ 'b')(
-            l.front.forceCast!(Number)(1.thArgOf(op))
-            .payload,
-            l.front.forceCast!(Number)(2.thArgOf(op))
-            .payload
-        )
-        );
+
+        const num1 = l.front.forceCast!Number(1.thArgOf(op)).payload;
+        const num2 = l.back.forceCast!Number(1.thArgOf(op)).payload;
+        return new Number(binaryFun!('a' ~ op ~ 'b')(num1, num2));
     });
 }
 

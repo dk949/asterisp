@@ -1,0 +1,58 @@
+(*Def simpleList
+    ; the `,` expression takes any number of arguments and returns a list of those arguments
+    (, 1 2 3)
+)
+
+(*Defn appendToList (list item)
+    ; the `,>` expression takes a list followed by 1 or more expressions of any type
+    ; and returns a new list with those items appended
+    (,> list item)
+)
+
+(*Defn prependToList (list item1 item2)
+    ; same as `,>` except items get added to the back of the list
+    ; Items get added in the same order they appear in the argument list
+    (,< list item1 item2)
+)
+
+(*Defn head (list)
+    ; The `^` expression takes a single list and returns it's first element
+    ; This can be through of as `car` in scheme
+    (^ list)
+)
+
+(*Defn last (list)
+    ; The `$` expression takes a single list and returns it's last element
+    ($ list)
+)
+
+(*Defn first (list)
+    ; The `^>` expression takes a single list and returns all but it's last element
+    (^> list)
+)
+
+(*Defn tail (list)
+    ; The `$>` expression takes a single list and returns all but it's first element
+    ; This can be through of as `cdr` in scheme
+    ($> list)
+)
+
+(*Defn getSize (list)
+    ; The `^?$` expression takes a single list and returns the number of elements in it
+    (^?$ list)
+)
+
+
+
+(*Main
+    (*Do
+        (*Print simpleList)
+        (*Print (appendToList  simpleList 4))
+        (*Print (prependToList  simpleList -1 0))
+        (*Print (head  simpleList))
+        (*Print (last  simpleList))
+        (*Print (first  simpleList))
+        (*Print (tail  simpleList))
+        (*Print (getSize  simpleList))
+    )
+)

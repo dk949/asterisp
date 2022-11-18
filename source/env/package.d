@@ -20,6 +20,10 @@ static this() {
         l.forceCount!1;
         return l.front;
     });
+    standard_environment[new Symbol("*Do")] = new Function((List l) {
+        l.forceAtLeast!1;
+        return l.back;
+    });
     standard_environment[new Symbol("*Print")] = new Function((List l) {
         foreach (elem; l)
             write(elem);

@@ -1,0 +1,9 @@
+; `*Def` assigns a labile to an expression
+; The expression is evaluated immediately upon assignment
+(*Def hello
+    42
+)
+
+(*Main
+    (*Print hello)
+)

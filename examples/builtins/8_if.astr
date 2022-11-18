@@ -1,0 +1,21 @@
+(*Def num
+    42
+)
+
+(*Main
+    (*Print
+        "the aswer is "
+        ; The `*If` expression takes 3 arguments
+        (*If
+            ; A number to be evaluated
+            (== num 42)
+
+            ; An expression returned if the first argument is not 0
+            "42"
+
+            ; An expression returned if the first argument is 0
+            "not 42"
+        )
+        ; Only one of the expressions gets evaluated
+    )
+)

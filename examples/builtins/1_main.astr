@@ -1,0 +1,5 @@
+; The `*Main` expression is the entry point to the program
+; Only one `*Main` is allowed in the program
+(*Main
+    42 ; Contains a single expression of any type
+)

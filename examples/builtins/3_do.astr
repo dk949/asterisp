@@ -1,0 +1,8 @@
+(*Main
+    ; `*Do` takes any number of expressions of any type, evaluates each and returns the last one
+    ; Much like `begin` does in scheme
+    (*Do
+        (*Print "hello")
+        (*Print "world")
+    )
+)

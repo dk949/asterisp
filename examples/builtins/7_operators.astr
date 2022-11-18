@@ -1,0 +1,67 @@
+
+; For the most part operator behaviour is as expected
+; All operators only accept numbers
+
+(*Defn add (x y)
+    (+ x y)
+)
+
+(*Defn sub (x y)
+    (- x y)
+)
+
+(*Defn mul (x y)
+    (* x y)
+)
+
+(*Defn div (x y)
+    (/ x y)
+)
+
+; There are no `bool`s, 0 rpresents false and 1 represents true
+
+(*Defn gt (x y)
+    (> x y)
+)
+
+(*Defn gte (x y)
+    (>= x y)
+)
+
+(*Defn lt (x y)
+    (< x y)
+)
+
+(*Defn lte (x y)
+    (<= x y)
+)
+
+(*Defn eql (x y)
+    ; Unlike scheme `==` is used for equality
+    (== x y)
+)
+
+(*Defn or (x y)
+    (|| x y)
+)
+
+(*Defn and (x y)
+    (&& x y)
+)
+
+
+(*Main
+    (*Do
+        (*Print (add 37 8))
+        (*Print (sub 37 8))
+        (*Print (mul 37 8))
+        (*Print (div 37 8))
+        (*Print (gt  37 8))
+        (*Print (gte 37 8))
+        (*Print (lt  37 8))
+        (*Print (lte 37 8))
+        (*Print (eql 37 8))
+        (*Print (or  37 8))
+        (*Print (and 37 8))
+    )
+)

@@ -1,0 +1,6 @@
+(*Main
+    ; `*Print` takes any number of expressions of any type and prints them to stdout
+    ; Nothing is inserted between printed expressions, so spaces have to be added manualy
+    ; A new line is added after the printed expression
+    (*Print "hello " "world")
+)

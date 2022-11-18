@@ -1,0 +1,22 @@
+
+(*Def id
+    ; A function is created with the `*Fn` expression
+    ; The expression has to be followed by a (possibly empty) list of parameters
+    ; This list contains labels which can be used inside the function
+    (*Fn (x)
+        x
+    )
+)
+
+; `*Defn` is shorthand for the syntax above
+(*Defn id' (x)
+    x
+)
+
+
+
+(*Main
+    ; if a labile is placed in a parenthesised expression, it is called like a function
+    ; Following arguments in the expression get bound to the parameters of the function
+    (*Print (id 1) (id' 2))
+)
