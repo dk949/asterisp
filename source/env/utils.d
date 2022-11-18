@@ -12,9 +12,9 @@ void addNumBinOp(string op)(ref Env env) {
         l.forceCount!2;
         return new Number(
             binaryFun!('a' ~ op ~ 'b')(
-            l.front.forceCast!(Number)
+            l.front.forceCast!(Number)(1.thArgOf(op))
             .payload,
-            l.back.forceCast!(Number)
+            l.front.forceCast!(Number)(2.thArgOf(op))
             .payload
         )
         );
@@ -22,7 +22,6 @@ void addNumBinOp(string op)(ref Env env) {
 }
 
 void addMathConst(string K)(ref Env env) {
-
     mixin("auto num = new Number(" ~ K ~ ");");
     env[new Symbol("math." ~ K)] = num;
 }

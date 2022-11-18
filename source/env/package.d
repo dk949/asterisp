@@ -62,47 +62,47 @@ static this() {
     // append
     standard_environment[new Symbol(",>")] = new Function((List l) {
         l.forceAtLeast!2;
-        auto lst = l.front.forceCast!List; //.payload;
+        auto lst = l.front.forceCast!List(1.thArgOf(",>"));
         return new List(lst ~ l.drop(1));
     });
     // prepend
     standard_environment[new Symbol(",<")] = new Function((List l) {
         l.forceAtLeast!2;
-        auto lst = l.front.forceCast!List.payload;
+        auto lst = l.front.forceCast!List(1.thArgOf(",<")).payload;
         return new List(l.drop(1) ~ lst);
     });
 
     // head
     standard_environment[new Symbol("^")] = new Function((List l) {
         l.forceCount!1;
-        auto lst = l.front.forceCast!List;
+        auto lst = l.front.forceCast!List(argOf("^"));
         return lst.front;
     });
     // tail
     standard_environment[new Symbol("$>")] = new Function((List l) {
         l.forceCount!1;
-        auto lst = l.front.forceCast!List;
+        auto lst = l.front.forceCast!List(argOf("$>"));
         return new List(lst[1 .. $]);
     });
 
     // first
     standard_environment[new Symbol("^>")] = new Function((List l) {
         l.forceCount!1;
-        auto lst = l.front.forceCast!List;
+        auto lst = l.front.forceCast!List(argOf("^>"));
         return new List(lst[0 .. ($ - 1)]);
     });
     // last
     standard_environment[new Symbol("$")] = new Function((List l) {
         l.forceCount!1;
-        auto lst = l.front.forceCast!List;
+        auto lst = l.front.forceCast!List(argOf("$"));
         return lst.back;
     });
 
     // element at
     standard_environment[new Symbol("^$")] = new Function((List l) {
         l.forceCount!2;
-        auto lst = l.front.forceCast!List;
-        auto idx = l.back.forceCast!Number;
+        auto lst = l.front.forceCast!List(1.thArgOf("^$"));
+        auto idx = l.back.forceCast!Number(2.thArgOf("^$"));
         if (!idx.isWhole)
             throw new ArgumentError("Expected index to be a whole number");
         if (idx < 0)
@@ -116,7 +116,7 @@ static this() {
     // get length
     standard_environment[new Symbol("^?$")] = new Function((List l) {
         l.forceCount!1;
-        auto lst = l.front.forceCast!List;
+        auto lst = l.front.forceCast!List(argOf("^?$"));
         return new Number(lst.length);
     });
 }

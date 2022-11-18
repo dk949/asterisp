@@ -33,12 +33,12 @@ unittest {
     assertThrown!InternalError(".".userText, "dot only");
 }
 
-T forceCast(T, W)(W what, string kind = "arguent") {
+T forceCast(T, W)(W what, string kind) {
     if (auto output = cast(T) what) {
         return output;
     } else {
         throw new TypeError(
-            "Expected " ~ kind ~ " to be of type "
+            "Expected " ~ kind ~ " to be a "
                 ~ typeid(T)
                 .userText
                 ~ ", got "
@@ -46,6 +46,78 @@ T forceCast(T, W)(W what, string kind = "arguent") {
                 .userText
         );
     }
+}
+
+private string th(long i) {
+    static immutable string[] suffixes = ["th", "st", "nd", "rd"];
+
+    const outp = i.text;
+    const last = outp[$ - 1];
+    const special = outp.length > 1 && outp[$ - 2] == '1';
+
+    switch (last) {
+        case '1':
+        case '2':
+        case '3':
+            if (special)
+                goto case '0';
+            return outp ~ suffixes[last - '0'];
+        case '0':
+        case '4': .. case '9':
+            return outp ~ suffixes[0];
+        default:
+            throw new InternalError("Cannot ith number " ~ outp);
+    }
+}
+
+// th
+unittest {
+    assert(0.th == "0th", "0th");
+    assert(1.th == "1st", "1st");
+    assert(2.th == "2nd", "2nd");
+    assert(3.th == "3rd", "3rd");
+    assert(4.th == "4th", "4th");
+    assert(9.th == "9th", "9th");
+
+    assert(10.th == "10th", "10th");
+    assert(11.th == "11th", "11th");
+    assert(12.th == "12th", "12th");
+    assert(13.th == "13th", "13th");
+    assert(14.th == "14th", "14th");
+    assert(19.th == "19th", "19th");
+
+    assert(21.th == "21st", "21st");
+    assert(22.th == "22nd", "22nd");
+
+    assert(100.th == "100th", "100th");
+    assert(101.th == "101st", "101st");
+    assert(102.th == "102nd", "102nd");
+    assert(103.th == "103rd", "103rd");
+
+    assert(111.th == "111th", "111th");
+    assert(112.th == "112th", "112th");
+    assert(113.th == "113th", "113th");
+
+    assert((-1).th == "-1st", "-1st");
+    assert((-2).th == "-2nd", "-2nd");
+    assert((-3).th == "-3rd", "-3rd");
+    assert((-4).th == "-4th", "-4th");
+    assert((-9).th == "-9th", "-9th");
+
+    assert((-10).th == "-10th", "-10th");
+    assert((-11).th == "-11th", "-11th");
+    assert((-12).th == "-12th", "-12th");
+    assert((-13).th == "-13th", "-13th");
+    assert((-14).th == "-14th", "-14th");
+    assert((-19).th == "-19th", "-19th");
+}
+
+string thArgOf(long n, string what) {
+    return n.th ~ " argument of " ~ what;
+}
+
+string argOf(string what) {
+    return "argument of " ~ what;
 }
 
 void forceCount(size_t n, L)(L l, string kind = "argument(s)")
