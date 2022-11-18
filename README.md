@@ -22,4 +22,4 @@ dub build
 
 ## Syntax
 
-Not finalised
+See `examples/builtins`
