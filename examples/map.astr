@@ -1,20 +1,16 @@
-(*Def map'
-    (*Fn (list fn newlist)
-        (*If (^?$ list)
-            (map' ($> list) fn
-                (,> newlist
-                    (fn (^ list))
-                )
+(*Defn map'  (list fn newlist)
+    (*If (^?$ list)
+        (map' ($> list) fn
+            (,> newlist
+                (fn (^ list))
             )
-            newlist
         )
+        newlist
     )
 )
 
-(*Def map
-    (*Fn (list fn)
-        (map' list fn (,))
-    )
+(*Defn map  (list fn)
+    (map' list fn (,))
 )
 
 (*Main

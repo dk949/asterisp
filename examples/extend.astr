@@ -1,9 +1,7 @@
-(*Def extend
-    (*Fn (l1 l2)
-        (*If (^?$ l2)
-            (extend (,> l1 (^ l2)) ($> l2))
-            l1
-        )
+(*Defn extend  (l1 l2)
+    (*If (^?$ l2)
+        (extend (,> l1 (^ l2)) ($> l2))
+        l1
     )
 )
 
