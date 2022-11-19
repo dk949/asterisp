@@ -160,4 +160,9 @@ struct Env {
             return outer.find(sym);
         throw new VariableError("No such variable: " ~ sym);
     }
+
+    @safe
+    this(this) pure nothrow {
+        _payload = _payload.dup.assertNotThrown;
+    }
 }
