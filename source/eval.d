@@ -14,11 +14,11 @@ Exp eval(Exp x) {
 }
 
 Exp eval(Package p) {
-    auto eviron = standard_environment;
+    auto environ = standard_environment;
     foreach (def; p.defines)
-        def.eval(eviron);
+        def.eval(environ);
     if (p.mainFn)
-        return p.mainFn.eval(eviron);
+        return p.mainFn.eval(environ);
     else
         return null;
 }
