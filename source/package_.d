@@ -3,6 +3,7 @@ module package_;
 import errors;
 import types;
 import utils;
+import hash;
 
 import std.array;
 
@@ -10,7 +11,10 @@ class Package {
     Exp config;
     Exp[] defines;
     Exp mainFn;
-    this(Exp[] exps) {
+    HashRes digest;
+    this(Exp[] exps, HashRes h) {
+        digest = h;
+
         auto defs = appender!(Exp[]);
 
         foreach (exp; exps) {

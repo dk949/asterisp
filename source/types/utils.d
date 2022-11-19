@@ -32,8 +32,7 @@ mixin template AddPayload(T) {
     override size_t toHash() const
     out (r; r != size_t.max) {
 
-        auto d = assertNotThrown(payload.text)
-            .digest!(MurmurHash3!128);
+        auto d = assertNotThrown(payload.text).makeHash;
         size_t output = void;
         memcpy(&output, &d[0], 8);
         return output;

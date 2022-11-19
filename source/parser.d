@@ -4,14 +4,15 @@ import errors;
 import package_;
 import tokenizer;
 import types;
+import hash;
 
 import std.array;
 
-Package parsePackage(Token[] tokens) {
+Package parsePackage(Token[] tokens, HashRes h) {
     auto exps = appender!(Exp[]);
     while (tokens.length != 0)
         exps.put(parse(tokens));
-    return new Package(exps.data);
+    return new Package(exps.data, h);
 }
 
 Exp parse(Token[] tokens) {

@@ -3,9 +3,9 @@ module types;
 import types.utils;
 
 import errors;
+import hash;
 
 import std.conv;
-import std.digest.murmurhash;
 import std.exception;
 import std.math;
 import std.range;
