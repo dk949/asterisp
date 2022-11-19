@@ -12,6 +12,6 @@ void execFile(string fileName) {
 
     text
         .tokenize
-        .parsePackage(text.makeHash)
+        .parsePackage((text ~ fileName).makeHash)
         .eval;
 }
