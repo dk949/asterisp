@@ -6,6 +6,7 @@ import utils;
 import hash;
 
 import std.array;
+import std.range;
 
 class Package {
     Exp config;
@@ -17,7 +18,7 @@ class Package {
 
         auto defs = appender!(Exp[]);
 
-        foreach (exp; exps) {
+        foreach (i, exp; exps.enumerate) {
             const lst = exp.forceCast!List("expression at package scope");
             lst.forceAtLeast!1("item in an expression at package scope");
             const sym = lst.front.forceCast!Symbol(1.thArgOf("expression at package scope"));
@@ -32,9 +33,18 @@ class Package {
                     else
                         throw new SemanticError("Expected only one `*Main` per application");
                     break;
+                case "*Config":
+                    if (i != 0)
+                        throw new SemanticError(
+                            "Expected `*Config` to be the first expression in a package");
+                    else if (config)
+                        throw new SemanticError("Expected only one `*Config` per package");
+                    else
+                        config = exp;
+                    break;
                 default:
                     throw new SemanticError(
-                        "Expected either a definition or `*Main` at package scope");
+                        "Expected either a definition, `*Config` or `*Main` at package scope");
             }
         }
         defines = defs.data;
