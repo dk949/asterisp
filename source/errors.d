@@ -1,6 +1,9 @@
 module errors;
 
+import utils;
+
 import std.exception;
+import std.stdio;
 
 class TokenError : Exception {
     mixin basicExceptionCtors;
@@ -44,4 +47,11 @@ class InterpreterArgError : InterpreterError {
 
 class InterpreterFileError : InterpreterError {
     mixin basicExceptionCtors;
+}
+
+void handleErrors(lazy void exec) {
+    try
+        exec();
+    catch (Exception e)
+        stderr.writeln(typeid(e).userText, ": ", e.message);
 }

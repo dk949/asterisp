@@ -4,6 +4,7 @@ import eval: eval;
 import parser;
 import tokenizer;
 import hash;
+import errors;
 
 import std.file;
 
@@ -13,5 +14,6 @@ void execFile(string fileName) {
     text
         .tokenize
         .parsePackage((text ~ fileName).makeHash)
-        .eval;
+        .eval
+        .handleErrors;
 }

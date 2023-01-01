@@ -1,19 +1,12 @@
 module repl;
 
+import errors;
 import eval: eval;
 import parser;
 import tokenizer;
 import utils;
 
 import std.stdio;
-
-void handleErrors(lazy void exec) {
-    try
-        exec;
-    catch (Exception e)
-        stderr.writeln(typeid(e).userText, ": ", e.message);
-
-}
 
 void runRepl(string prompt = "*> ") {
     while (stdin.isOpen) {
