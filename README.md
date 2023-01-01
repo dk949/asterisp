@@ -1,5 +1,7 @@
 # Asterisp
 
+![logo](logo/logo_dark.svg)
+
 A simple interpreted lisp.
 
 ## Usage
