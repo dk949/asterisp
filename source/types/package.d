@@ -31,7 +31,6 @@ class Symbol : Atom {
 }
 
 class Number : Atom {
-
     mixin AddPayload!(double);
 
     bool isWhole() const {
