@@ -12,7 +12,7 @@ void execFile(string fileName) {
     auto text = fileName.readText;
 
     text
-        .tokenize
+        .tokenize(fileName)
         .parsePackage((text ~ fileName).makeHash)
         .eval
         .handleErrors;

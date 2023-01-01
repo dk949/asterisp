@@ -21,3 +21,6 @@ auto end(R)(auto ref R r)
 if (isSomeString!R) {
     return (&r[$ - 1]) + 1;
 }
+
+alias It(T) = immutable(T)*;
+alias CharIt = It!(char);

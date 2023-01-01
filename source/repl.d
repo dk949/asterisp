@@ -16,7 +16,7 @@ void runRepl(string prompt = "*> ") {
             break;
 
         line
-            .tokenize
+            .tokenize("REPL")
             .parse
             .eval
             .writeln

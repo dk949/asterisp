@@ -1,5 +1,7 @@
 module tokenizer.token;
 
+import tokenizer.location;
+
 import errors;
 
 import std.conv;
@@ -35,6 +37,7 @@ enum isTokStr(TS) = __traits(isSame, TemplateOf!(TS), TokStr);
 struct Token {
     private TokenType m_type;
     private Payload payload;
+    private Loc m_location;
 
     TokenType type() const {
         return m_type;
@@ -84,24 +87,28 @@ struct Token {
             return false;
     }
 
-    this(double num) pure nothrow {
+    this(double num, Loc loc) pure nothrow {
+        m_location = loc;
         m_type = TokenType.NUMBER;
         payload.num = num;
     }
 
-    this(S)(S str) pure
+    this(S)(S str, Loc loc) pure
     if (isSomeString!S) {
+        m_location = loc;
         m_type = TokenType.ID;
         payload.str = str.text;
     }
 
-    this(TS)(TS tokS) pure
+    this(TS)(TS tokS, Loc loc) pure
     if (isTokStr!TS) {
+        m_location = loc;
         m_type = TokenType.STRING;
         payload.str = tokS.s.text;
     }
 
-    this(TokenType tok) pure nothrow {
+    this(TokenType tok, Loc loc) pure nothrow {
+        m_location = loc;
         m_type = tok;
         payload = payload.init;
     }

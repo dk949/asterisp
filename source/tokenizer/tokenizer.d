@@ -2,14 +2,13 @@ module tokenizer.tokenizer;
 
 import tokenizer.token;
 import tokenizer.utils;
+import tokenizer.location;
 
 import errors;
 
 import std.array;
 import std.conv;
 import std.uni;
-
-private alias CharIt = immutable(char)*;
 
 private enum State {
     Begin,
@@ -22,18 +21,21 @@ private enum State {
 }
 
 struct Tokenizer {
+    private string m_filename;
     private string m_input;
     private Appender!(char[]) m_currToken;
     private Appender!(Token[]) m_tokenized;
     private State m_state;
     private CharIt m_char;
+    private CharIt m_begin;
 
-    this(string input) {
+    this(string input, string filename) {
         m_input = input;
         m_currToken = appender!(char[]);
         m_tokenized = appender!(Token[]);
         m_state = State.Begin;
         m_char = input.empty ? null : input.begin;
+        m_begin = m_char;
     }
 
     Token[] run() {
@@ -83,14 +85,15 @@ struct Tokenizer {
         return m_tokenized.data;
     }
 
-    private void sBegin() {
+private:
+    void sBegin() {
         switch (*m_char) {
             case '(':
-                m_tokenized.put(Token(TokenType.LBRACKET));
+                m_tokenized.put(makeTok(TokenType.LBRACKET));
                 drop;
                 break;
             case ')':
-                m_tokenized.put(Token(TokenType.RBRACKET));
+                m_tokenized.put(makeTok(TokenType.RBRACKET));
                 drop;
                 break;
             case ' ':
@@ -115,13 +118,13 @@ struct Tokenizer {
         }
     }
 
-    private void sComment() {
+    void sComment() {
         if (*m_char == '\n')
             toState(State.Begin);
         drop;
     }
 
-    private void sID() {
+    void sID() {
         switch (*m_char) {
             case '"':
                 throw new TokenError("unsexpected \" when parsing ID");
@@ -137,7 +140,7 @@ struct Tokenizer {
         }
     }
 
-    private void sNumber() {
+    void sNumber() {
         switch (*m_char) {
             case '0': .. case '9':
             case '.':
@@ -152,7 +155,7 @@ struct Tokenizer {
         }
     }
 
-    private void sMinus() {
+    void sMinus() {
         if (*m_char != '-')
             throw new InternalError("Expected - found " ~ *m_char);
         if (m_char + 1 != m_input.end && isNumber(*(m_char + 1)))
@@ -162,14 +165,14 @@ struct Tokenizer {
 
     }
 
-    private void sStringStart() {
+    void sStringStart() {
         if (*m_char != '"')
             throw new InternalError("Expected \" found " ~ *m_char);
         drop;
         toState(State.String);
     }
 
-    private void sString() {
+    void sString() {
         switch (*m_char) {
             case '"':
                 drop;
@@ -183,36 +186,36 @@ struct Tokenizer {
         }
     }
 
-    private void toState(State s) {
+    void toState(State s) {
         m_state = s;
     }
 
-    private void consume() {
+    void consume() {
         m_currToken.put(*m_char);
         m_char++;
     }
 
-    auto drop() {
+    void drop() {
         m_char++;
     }
 
-    auto dupe() {
+    void dupe() {
         m_currToken.put(*m_char);
     }
 
-    private void store(State st) {
+    void store(State st) {
         final switch (st) {
             case State.Number:
                 try
-                    m_tokenized.put(Token(m_currToken.data.to!double));
+                    m_tokenized.put(makeTok(m_currToken.data.to!double));
                 catch (ConvException)
                     throw new TokenError("Invalid number " ~ m_currToken.data.idup);
                 break;
             case State.String:
-                m_tokenized.put(Token(tokStr(m_currToken.data)));
+                m_tokenized.put(makeTok(tokStr(m_currToken.data)));
                 break;
             case State.ID:
-                m_tokenized.put(Token(m_currToken.data));
+                m_tokenized.put(makeTok(m_currToken.data));
                 break;
             case State.Begin:
             case State.Minus:
@@ -221,6 +224,14 @@ struct Tokenizer {
                 throw new InternalError("Cannot store m_state " ~ st.text);
         }
         m_currToken.clear();
+    }
+
+    Loc makeLoc() {
+        return Loc(m_begin[0 .. m_char - m_begin], m_filename);
+    }
+
+    Token makeTok(T)(auto ref T t) {
+        return Token(t, makeLoc());
     }
 
 }
