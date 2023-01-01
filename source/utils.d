@@ -4,6 +4,7 @@ import errors;
 import types;
 
 import std.conv;
+import std.traits;
 
 string userText(T)(T t) {
     string s = t.text;
@@ -171,4 +172,20 @@ auto ref dbg(string msg, T)(auto ref T t) {
 
 void clear(R)(ref R r) {
     r.length = 0;
+}
+
+/**
+ *
+ * Params:
+ *   a = First expression. Always evaluated once
+ *   b = Second expression. Evaluated once if `a` is falsy
+ * Returns:
+ *   `a` if `a` is truthy, other wise `b`
+ */
+CommonType!(A, B) coal(A, B)(lazy A a, lazy B b)
+if (!is(CommonType!(A, B) == void)) {
+    if(const res = a)
+        return res;
+    else
+        return b;
 }
