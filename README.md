@@ -1,6 +1,9 @@
 # Asterisp
 
-![logo](logo/logo_dark.svg)
+<p align="center">
+    <img src="logo/logo_dark.svg#gh-light-mode-only" height="200" alt="Logo"/>
+    <img src="logo/logo_light.svg#gh-dark-mode-only" height="200" alt="Logo"/>
+</p>
 
 A simple interpreted lisp.
 
