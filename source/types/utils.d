@@ -27,19 +27,12 @@ mixin template AddPayload(T) {
         return payload == p;
     }
 
-    // XXX: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     @trusted
-    override size_t toHash() const
-    out (r; r != size_t.max) {
-
-        auto d = assertNotThrown(payload.text).makeHash;
-        size_t output = void;
-        memcpy(&output, &d[0], 8);
-        return output;
+    override size_t toHash() const {
+        return payload.sHashOf;
     }
 
     override string toString() const {
-
         return payload.text;
     }
 }

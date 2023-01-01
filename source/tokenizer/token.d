@@ -3,6 +3,7 @@ module tokenizer.token;
 import tokenizer.location;
 
 import errors;
+import hash;
 
 import std.conv;
 import std.exception;
@@ -85,6 +86,11 @@ struct Token {
                 return true;
         } else
             return false;
+    }
+
+    @trusted nothrow
+    size_t toHash() const {
+        return combineHash(m_type, payload, m_location);
     }
 
     this(double num, Loc loc) pure nothrow {

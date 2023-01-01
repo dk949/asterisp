@@ -108,6 +108,7 @@ class Procedure : Callable {
             return false;
     }
 
+    //FIXME: this works, but I don't like it
     override size_t toHash() const {
         size_t output = 0;
         foreach (sym; params)

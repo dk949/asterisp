@@ -3,7 +3,6 @@ module package_;
 import errors;
 import types;
 import utils;
-import hash;
 
 import std.array;
 import std.range;
@@ -12,8 +11,8 @@ class Package {
     Exp config;
     Exp[] defines;
     Exp mainFn;
-    HashRes digest;
-    this(Exp[] exps, HashRes h) {
+    size_t digest;
+    this(Exp[] exps, size_t h) {
         digest = h;
 
         auto defs = appender!(Exp[]);

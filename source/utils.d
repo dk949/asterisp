@@ -184,7 +184,7 @@ void clear(R)(ref R r) {
  */
 CommonType!(A, B) coal(A, B)(lazy A a, lazy B b)
 if (!is(CommonType!(A, B) == void)) {
-    if(const res = a)
+    if (const res = a)
         return res;
     else
         return b;
