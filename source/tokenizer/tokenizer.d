@@ -69,11 +69,11 @@ struct Tokenizer {
         }
         final switch (m_state) {
             case State.StringStart:
-                throw new TokenError("Unexpected \" at end of input");
+                throw new TokenError(makeLoc(), "Unexpected \" at end of input");
             case State.Minus:
                 throw new InternalError("Unstored Minus at end of input");
             case State.String:
-                throw new TokenError("Unterminated string at end of input");
+                throw new TokenError(makeLoc(), "Unterminated string at end of input");
             case State.ID:
             case State.Number:
                 store(m_state);
@@ -127,7 +127,7 @@ private:
     void sID() {
         switch (*m_char) {
             case '"':
-                throw new TokenError("unsexpected \" when parsing ID");
+                throw new TokenError(makeLoc(), "unsexpected \" when parsing ID");
             case '(':
             case ')':
             case ' ':
@@ -180,7 +180,7 @@ private:
                 store(State.String);
                 break;
             case '\\':
-                throw new TokenError("Escape characters not yet supported");
+                throw new TokenError(makeLoc(), "Escape characters not yet supported");
             default:
                 consume;
         }
@@ -209,7 +209,7 @@ private:
                 try
                     m_tokenized.put(makeTok(m_currToken.data.to!double));
                 catch (ConvException)
-                    throw new TokenError("Invalid number " ~ m_currToken.data.idup);
+                    throw new TokenError(makeLoc(), "Invalid number " ~ m_currToken.data.idup);
                 break;
             case State.String:
                 m_tokenized.put(makeTok(tokStr(m_currToken.data)));
