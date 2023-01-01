@@ -76,25 +76,25 @@ private Symbol[] fnSymbolList(List params) {
 static this() {
     specialFns = [
         new Symbol("*Def"): (ref args, ref env) {
-            args.forceCount!2;
+            args.forceCount!2(argOf("*Def"));
             auto sym = args[0].forceCast!Symbol(1.thArgOf("*Def"));
             env[sym.checkNewSym(env)] = eval(args[1], env);
             return env[sym];
         },
         new Symbol("*Fn"): (ref args, ref env) {
-            args.forceCount!2;
+            args.forceCount!2(argOf("*Fn"));
             auto params = args[0].forceCast!List(1.thArgOf("*Fn"));
             return new Procedure(params.fnSymbolList, args[1], env, &eval);
         },
         new Symbol("*Defn"): (ref args, ref env) {
-            args.forceCount!3;
+            args.forceCount!3(argOf("*Defn"));
             auto sym = args[0].forceCast!Symbol(1.thArgOf("*Defn"));
             auto params = args[1].forceCast!List(2.thArgOf("*Defn"));
             env[sym.checkNewSym(env)] = new Procedure(params.fnSymbolList, args[2], env, &eval);
             return env[sym];
         },
         new Symbol("*If"): (ref args, ref env) {
-            args.forceCount!3;
+            args.forceCount!3(argOf("*If"));
             return eval(args[0], env).forceCast!Number(1.thArgOf("*If"))
                 .payload
                 ? eval(args[1], env) //

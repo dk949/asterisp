@@ -10,7 +10,7 @@ import std.stdio;
 
 void addNumBinOp(string op)(ref Env env) {
     env[new Symbol(op)] = new Function((List l) {
-        l.forceCount!2;
+        l.forceCount!2(argOf(op));
 
         const num1 = l.front.forceCast!Number(1.thArgOf(op)).payload;
         const num2 = l.back.forceCast!Number(1.thArgOf(op)).payload;

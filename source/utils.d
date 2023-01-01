@@ -51,6 +51,7 @@ T forceCast(T, W)(W what, string kind) {
 private string th(long i) {
     static immutable string[] suffixes = ["th", "st", "nd", "rd"];
 
+    // TODO: Why am i converting it to string?
     const outp = i.text;
     const last = outp[$ - 1];
     const special = outp.length > 1 && outp[$ - 2] == '1';
@@ -117,10 +118,10 @@ string thArgOf(long n, string what) {
 }
 
 string argOf(string what) {
-    return "argument of " ~ what;
+    return "argument of `" ~ what ~ "`";
 }
 
-void forceCount(size_t n, L)(L l, string kind = "argument(s)")
+void forceCount(size_t n, L)(L l, string kind)
 if (is(L == List) || is(L == Exp[])) {
     if (l.length != n)
         throw new ArgumentError(
@@ -131,7 +132,7 @@ if (is(L == List) || is(L == Exp[])) {
         );
 }
 
-void forceAtLeast(size_t n, L)(inout(L) l, string kind = "argument(s)")
+void forceAtLeast(size_t n, L)(inout(L) l, string kind)
 if (is(L == List) || is(L == Exp[])) {
     if (l.length < n)
         throw new ArgumentError(
