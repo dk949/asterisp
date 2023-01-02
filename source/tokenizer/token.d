@@ -141,7 +141,7 @@ struct Token {
             else static if (tok == TokenType.ID || tok == TokenType.STRING)
                 return payload.str;
         } else
-            throw new TokenError("Cannot convert " ~ m_type.text ~ " to " ~ tok.text);
+            throw new InternalError("Cannot convert " ~ m_type.text ~ " to " ~ tok.text);
     }
 }
 

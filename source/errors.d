@@ -41,6 +41,8 @@ class InternalError : Error {
 public void handleErrors(lazy void exec) {
     try
         exec();
+    catch (RuntimeError e)
+        stderr.writeln(e.loc, ": ", typeid(e).userText, ": ", e.message);
     catch (Exception e)
         stderr.writeln(typeid(e).userText, ": ", e.message);
 }

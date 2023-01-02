@@ -31,6 +31,7 @@ struct Tokenizer {
 
     this(string input, string filename) {
         m_input = input;
+        m_filename = filename;
         m_currToken = appender!(char[]);
         m_tokenized = appender!(Token[]);
         m_state = State.Begin;
