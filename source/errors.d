@@ -6,70 +6,80 @@ import tokenizer.location;
 import std.exception;
 import std.stdio;
 
-mixin template locationExceptionCtors() {
-    Loc loc;
-    this(Loc location, string msg) @nogc @safe pure nothrow {
-        this(msg);
-    }
+// Runtime exceptions
 
-    @nogc @safe pure nothrow
-    this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null) {
-        super(msg, file, line, next);
-    }
-
-    @nogc @safe pure nothrow
-    this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__) {
-        super(msg, file, line, next);
-    }
+abstract class RuntimeError : Exception {
+    mixin locCtor;
+    mixin basicExceptionCtors;
 }
 
-class TokenError : Exception {
-    mixin locationExceptionCtors;
+mixin makeRuntimeError!"TokenError";
+mixin makeRuntimeError!"SyntaxError";
+mixin makeRuntimeError!"SemanticError";
+mixin makeRuntimeError!"ArgumentError";
+mixin makeRuntimeError!"IndexError";
+mixin makeRuntimeError!"TypeError";
+mixin makeRuntimeError!"VariableError";
+
+// Interpreter exceptions
+
+abstract class InterpreterError : Exception {
+    mixin basicExceptionCtors;
 }
 
-class SyntaxError : Exception {
-    mixin locationExceptionCtors;
-}
+mixin makeInterpreterError!"InterpreterArgError";
+mixin makeInterpreterError!"InterpreterFileError";
 
-class SemanticError : Exception {
-    mixin locationExceptionCtors;
-}
-
-class ArgumentError : Exception {
-    mixin locationExceptionCtors;
-}
-
-class IndexError : Exception {
-    mixin locationExceptionCtors;
-}
-
-class TypeError : Exception {
-    mixin locationExceptionCtors;
-}
-
-class VariableError : Exception {
-    mixin locationExceptionCtors;
-}
-
-class InterpreterError : Exception {
-    mixin locationExceptionCtors;
-}
+// Errors
 
 class InternalError : Error {
-    mixin locationExceptionCtors;
+    mixin basicExceptionCtors;
 }
 
-class InterpreterArgError : InterpreterError {
-    mixin locationExceptionCtors;
-}
+// Utilities
 
-class InterpreterFileError : InterpreterError {
-    mixin locationExceptionCtors;
-}
-
-void handleErrors(lazy void exec) {
+public void handleErrors(lazy void exec) {
     try
         exec();
     catch (Exception e)
         stderr.writeln(typeid(e).userText, ": ", e.message);
+}
+
+private mixin template makeRuntimeError(string name) {
+    mixin("class " ~ name ~ " : RuntimeError {
+        @nogc @safe pure nothrow
+        this(Loc location, string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null) {
+            super(location, msg, file, line, next);
+        }
+        @nogc @safe pure nothrow
+        this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null) {
+            super(msg, file, line, next);
+        }
+        @nogc @safe pure nothrow
+        this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__) {
+            super(msg, file, line, next);
+        }
+    }");
+}
+
+private mixin template makeInterpreterError(string name) {
+    mixin("class " ~ name ~ " : InterpreterError {
+        mixin basicExceptionCtors;
+    }");
+}
+
+/* For use with basicExceptionCtors.
+   If a ctor is defiend in a class and a mixin defines another ctor,
+   the one from the mixin gets ignored (dmd-2.101.2 and ldc-1.30.0, maybe bug?).
+
+   If both defined in mixins, both are considered
+*/
+private mixin template locCtor() {
+    Loc loc;
+    @nogc @safe pure nothrow
+    this(Loc location, string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null) {
+        loc = location;
+        super(msg, file, line, next);
+    }
+
 }
