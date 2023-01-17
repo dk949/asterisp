@@ -153,14 +153,6 @@ struct Env {
         return output;
     }
 
-    ref Exp find(Symbol sym) return {
-        if (sym in _payload)
-            return this[sym];
-        else if (outer)
-            return outer.find(sym);
-        throw new VariableError("No such variable: " ~ sym);
-    }
-
     @safe
     this(this) pure nothrow {
         _payload = _payload.dup.assertNotThrown;
