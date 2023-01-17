@@ -1,10 +1,14 @@
 module errors;
 
 import utils;
+import envconfig;
 import tokenizer.location;
 
 import std.exception;
 import std.stdio;
+import std.conv;
+import std.range;
+import std.algorithm.comparison;
 
 // Runtime exceptions
 
@@ -38,13 +42,29 @@ class InternalError : Error {
 
 // Utilities
 
+private void errorPrinter(Exception e) {
+    string baseText = text(typeid(e).userText, ": ", e.message);
+
+    string fullText = e.castSwitch!(
+        (RuntimeError rt) => text(rt.loc, " ", baseText),
+        (Exception _) => baseText,
+    );
+    stderr.writeln(fullText);
+
+    // TODO: implement real traceback
+    if (envcfg.ASTR_TRACEBACK) {
+        stderr.writeln("\n_________________________ TRACE BACK _________________________\n");
+        int i = 0; // cannot use enumerate
+        foreach (trace; e.info)
+            stderr.writeln(i++, ": ", trace);
+    }
+}
+
 public void handleErrors(lazy void exec) {
     try
         exec();
-    catch (RuntimeError e)
-        stderr.writeln(e.loc, " ", typeid(e).userText, ": ", e.message);
     catch (Exception e)
-        stderr.writeln(typeid(e).userText, ": ", e.message);
+        e.errorPrinter;
 }
 
 private mixin template makeRuntimeError(string name) {
