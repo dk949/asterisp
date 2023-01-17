@@ -7,6 +7,14 @@ import types;
 
 import std.array;
 
+private Token* lastToken;
+Loc getLoc(Token* tok) {
+    if (tok)
+        return tok.location;
+    else
+        return Loc(1, 1, null);
+}
+
 Package parsePackage(Token[] tokens, size_t h) {
     auto exps = appender!(Exp[]);
     while (tokens.length != 0)
@@ -15,24 +23,29 @@ Package parsePackage(Token[] tokens, size_t h) {
 }
 
 Exp parse(Token[] tokens) {
+    lastToken = tokens ? &tokens[0] : null;
     return parse(tokens);
 }
 
+Token[] checkEOI(return scope Token[] t) {
+    if (t is null || t.length == 0)
+        throw new SyntaxError(lastToken.getLoc(), "unexpected end of input");
+    return t;
+}
+
 Exp parse(ref Token[] tokens) {
-    if (tokens is null || tokens.length == 0)
-        throw new SyntaxError("unexpected end of input");
-    auto token = tokens.front;
+    auto token = tokens.checkEOI().front;
+    lastToken = &tokens[0];
     tokens.popFront;
     if (token == TokenType.LBRACKET) {
-        if (tokens.length == 0)
-            throw new SyntaxError("unexpected end of input");
         auto l = new List();
-        while (tokens.front != TokenType.RBRACKET)
+        while (tokens.checkEOI.front != TokenType.RBRACKET)
             l ~= parse(tokens);
+
         tokens.popFront;
         return l;
     } else if (token == TokenType.RBRACKET) {
-        throw new SyntaxError("Unexpected )");
+        throw new SyntaxError(lastToken.getLoc(), "Unexpected )");
     } else
         return atom(token);
 }

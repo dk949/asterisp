@@ -40,6 +40,11 @@ struct Token {
     private Payload payload;
     private Loc m_location;
 
+    nothrow @nogc pure
+    Loc location() const {
+        return m_location;
+    }
+
     TokenType type() const {
         return m_type;
     }
